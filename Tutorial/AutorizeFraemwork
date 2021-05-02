@@ -34,7 +34,7 @@ if(user.Роль = "1")
                     {
                         var user = FactoryEntities.GetContext().Пользователь.First(p => p.Логин == TBLogin.Text && p.Пароль == TBPassword.Text);
                         if (user != null)
-                        {
+                        {//Дальше идёт авторизация в зависимости от роли
                             if (user.Роль == "1")
                             {
                                 this.Hide();
