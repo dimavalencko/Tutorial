@@ -1,0 +1,5 @@
+WebClient client = new WebClient();
+string x = client.DownloadString("http://127.0.0.1:8080/isValid?user_id=5");
+client.UploadString("", )
+if (x == "true"){} 
+else{}

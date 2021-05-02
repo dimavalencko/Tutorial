@@ -1,0 +1,108 @@
+Метод перед инсталайз выглядит примерно так:
+public partial class NewCar: Window
+    {
+        //Писать тут
+    }
+
+Есть 2 страницы Car и NewCar. На странице NewCar мы делаем поля для ввода данных с привязкой(TextBox у которого Binding будет на нужный столбик таблицы в БД, например Text="{Binding Наименование}". Затем перед главным методом с инсталайз мы создаем "public названиетаблицы переменная = new названиетаблицы" и после InitializeComponent прописываем DataContext = переменная(Например DataContext = newcloth);
+Например:  
+public partial class NewCar: Window
+    {
+        private Ткань newcloth = new Ткань();//Вот это
+        public NewCar()
+        {
+           InitializeComponent();
+           DataContext = newcloth
+        }
+    }
+Затем кнопка сохранить со всеми проверками:
+private void Save(object sender, RoutedEventArgs e)
+        {
+            if (newcloth.Артикул == 0)
+                FactoryEntities.GetContext().Ткань.Add(newcloth);
+
+            try
+            {
+                FactoryEntities.GetContext().SaveChanges();
+                MessageBox.Show("Saved!");
+                this.Close();
+                ClothList frm = new ClothList();
+                frm.Show();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+        }
+
+Потом на странице Car делаем метод IsVisibleChanged(Это у самого окна а не у какого-то контрола):
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ТвойФрэймворк.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+            НазваниеГрида.ItemsSource = ТвойФрэймворк.GetContext().НазваниеТаблицы.ToList();
+        }
+
+Для работоспособности редактирования нужно: 
+На странице NewCar делаем следующее:
+В скобки главного метода записываем экземпляр обьекта:
+public NewCar(Названиетаблицы selectedcar)
+и внутри метода прописываем 
+if(selectedcar 1= null)
+_currentcar = selectedcar;
+
+В итоге вместе с добавлением это выглядит так:
+public partial class NewCar: Window
+    {
+        private Ткань newcloth = new Ткань();//Вот это
+        public NewCar(Ткань currentcloth)
+        {
+           InitializeComponent();
+           if(currentcloth != null)
+                {           
+                   currentcloth = newcloth;
+                }
+           DataContext = newcloth;
+        }
+    }
+
+
+затем в методе кнопки добавления пишем в скобки null
+а в скобки кнопки редактирования пишем
+((sender as button).DataContext as названиетаблицы)
+Это выглядит как то так:
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            ClothEdit frm = new ClothEdit((sender as Button).DataContext as Ткань);
+            this.Hide();//Важно сначала передать DataContext а потом скрывать страницу, иначе он ничего не передаст. Логично же что из скрытого окна нельзя достать ничего))))
+            frm.Show();
+        }
+
+И добавление:
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            ClothEdit frm = new ClothEdit(null);
+            this.Hide();
+            frm.Show();
+        }
+
+Почему в скобках что-то прописываем и как это работает? Усть 2 окна: Car и NewCar. Если мы в скобках NewCar пропишем например:
+        public NewCar(string clientname)
+        {
+           InitializeComponent();
+        }
+Это значит что при переходе на это окно нужно всегда чт-то отправлять, т.е это окно принимает какие-то данные из предыдущего окна и записывает их в переменную clientname. Если нам нужно что-то отправить то мы при переходе пишем что взять. Например в TextBox1 в окне Car имеется фамилия клиента, которую нужно отправить на окно NewCar и вывести в TextBox2. Тогда при переходе на окно NewCar в скобках мы пишем что мы посылаем, т.е:
+         private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            NewCar frm = new NewCar(TextBox1.Text);
+            this.Hide();
+            frm.Show();
+        }
+
+И когда принимаем пишем следующее:
+        public NewCar(string clientname)//Или просто clientname. Так тоже работает
+        {
+           InitializeComponent();
+           TextBox2.Text = clientname.ToString();//ToString пишется только когда ты принимаешь не строку а например цифру в int.
+        }
+
+Но теперь при переходе на NewCar нужно писать что-то в скобках т.к мы что-то принимаем, а значит надо и послать. Если ничего не посылаем пишем null и всё.

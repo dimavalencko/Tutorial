@@ -1,0 +1,25 @@
+Прежде чем использовать это нужно подключить Эксель. как это делается: Справа в обозревателе решений жмём правой кнопкой на ссылки и жмём добавить. Слева выбираем COM и в поиске прописываем Excel. Ищем в полученном списке Microsoft Excel 16/0 Object Library и ставим галочку в чекбокс.
+Далее нужно поместить код ниже в обработчик кнопки по нажатию которй будет вывод в Эксель. В коде нужно лишь заменить название DataGrid откуда берутся данные, т.е заменить DGridCloth на свое название. Также тут имеются некоторые ньюансы которые нужно подробно объяснять, но не в данном туториале. Код:
+
+
+ Excel.Application excel = new Excel.Application();
+            excel.Visible = true;
+            Workbook workbook = excel.Workbooks.Add(System.Reflection.Missing.Value);
+            Worksheet sheet1 = (Worksheet)workbook.Sheets[1];
+
+            for (int j = 0; j < DGridCloth.Columns.Count; j++)
+            {
+                Range myRange = (Range)sheet1.Cells[1, j + 1];
+                sheet1.Cells[1, j + 1].Font.Bold = true;
+                sheet1.Columns[j + 1].ColumnWidth = 15;
+                myRange.Value2 = DGridCloth.Columns[j].Header;
+            }
+            for (int i = 0; i < DGridCloth.Columns.Count; i++)
+            {
+                for (int j = 0; j < DGridCloth.Items.Count; j++)
+                {
+                    TextBlock b = DGridCloth.Columns[i].GetCellContent(DGridCloth.Items[j]) as TextBlock;
+                    Microsoft.Office.Interop.Excel.Range myRange = (Microsoft.Office.Interop.Excel.Range)sheet1.Cells[j + 2, i + 1];
+                    myRange.Value2 = b.Text;
+                }
+            }

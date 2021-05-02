@@ -1,0 +1,25 @@
+<TextBlock Panel.ZIndex="1" IsHitTestVisible="False" x:Name="WaterMarkLogin" Foreground="Gray" Text="Введите логин" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="180 10 0 5" FontSize="18" Height="29" Width="149">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=TBLogin}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+<TextBox x:Name="TBPassword" Width="150" Height="30" Grid.Row="1" VerticalAlignment="Top" Margin="5" VerticalContentAlignment="Center" x:FieldModifier="public" KeyDown="TBPassword_KeyDown" MouseEnter="TBpassMouseEnter"/>
+            <TextBlock x:Name="WaterMarkPass" IsHitTestVisible="False"  Foreground="Gray" Text="Введите пароль" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="180,7,0,0" FontSize="18" TextDecorations="{x:Null}" Width="149" Height="30">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=TBPassword}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>

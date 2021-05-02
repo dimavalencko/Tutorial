@@ -1,0 +1,91 @@
+Entrty:Entry представляет текстовое поле для ввода однострочной информации:
+Editor: многострочное поле ввода:
+-PlaceHolder - Подсказка;
+-IsPassword: при значении true указывает, то поле будет предназначено для ввода пароля, и поэтому все вводимые символы будут заменяться звездочкой;
+BoxView Полоска ограничитель:
+            <StackLayout>
+                <Label Text="METANIT.COM" FontSize="Title" HorizontalOptions="Center"  />
+                <BoxView Color="Gray"  HeightRequest="2" HorizontalOptions="Fill" />
+                <BoxView Color="Gray"  HeightRequest="2" HorizontalOptions="Fill" />
+                <Label Text="Руководство по Xamarin Forms" FontSize="Large" HorizontalOptions="Center"  />
+            </StackLayout>
+
+DatePicker:
+
+-DatePicker предназначен для выбора дат. Для его управления могут использоваться следующие свойства:
+-MaximumDate: максимальная возможная дата, по умолчанию равна 31 декабря 2100
+-MinimumDate: минимальная возможная дата, по умолчанию равна 1 января 1900
+-Date: выбранная дата, по умолчанию равна значению DateTime.Today
+-Format: определяет формат даты
+
+Picker:
+-Визуально Picker представляет собой обычное текстовое поле, по нажатию на которое открывается список для выбора, что-то наподобие выпадающего списка:
+
+Switch:Элемент Switch представляет переключатель, который может находиться в двух состояниях: включенном и выключенном.
+
+Среди свойств класса Switch стоит выделить следующие:
+-IsToggled: указывает, находится ли Switch во включенном состоянии (значение true) или выключенном (значение false)
+-ThumbColor: цвет кнопки переключателя
+-OnColor: цвет переключателя во включенном состоянии
+
+
+Регистрация:
+   <TableView.Root>
+      <TableRoot>
+        <TableSection Title="Персональные данные">
+          <EntryCell Label="Логин" Keyboard="Default" Placeholder="Введите логин" />
+          <SwitchCell Text="Сохранить" />
+        </TableSection>
+        <TableSection Title="Контакты">
+          <EntryCell Label="Телефон" Keyboard="Telephone" Placeholder="введите телефон" />
+          <EntryCell Label="Email" Keyboard="Email" Placeholder="введите email" />
+        </TableSection>
+      </TableRoot>
+    </TableView.Root>
+  </TableView>
+  
+EntryCell при завершении ввода (когда пользователь нажимает на кнопку "Готово" на клавиатуре) генерирует событие Completed.
+Объект SwitchCell при переключении состояния генерирует событие
+
+Просмотр Web:
+<StackLayout>
+  <StackLayout Orientation="Horizontal">
+    <Button Text="Go" Clicked="button_Clicked" />
+    <Entry x:Name="urlEntry" HorizontalOptions="FillAndExpand" />
+  </StackLayout>
+  <WebView x:Name="webView" Source="https://devblogs.microsoft.com/xamarin/" VerticalOptions="FillAndExpand" />
+</StackLayout>
+
+
+Всплывающий мессадж бокс
+
+private async void AlertButton_Clicked(object sender, EventArgs e)
+{
+    bool result = await DisplayAlert("Заголовок", "Текст сообщения", "Да", "Нет");
+    await DisplayAlert("Уведомление", "Вы выбрали: "+ (result ? "Удалить" : "Отменить"), "OK");
+}
+
+
+навигация
+    public partial class App : Application
+    {
+        public App()
+        {
+            InitializeComponent();
+ 
+            MainPage = new NavigationPage(new MainPage());
+        }
+        
+        затем нажатие кнопки
+        
+    button.clicked += async (sender, arghs, e) => 
+    {
+    await Navigation.PushAsync (new SecondPage ());
+    Navigation.RemovePage(this);
+    
+    либо
+    
+    button.clicked += async (sender, e) => {
+    await Navigation.PushAsync (new SecondPage ());
+    Navigation.RemovePage(this);
+};

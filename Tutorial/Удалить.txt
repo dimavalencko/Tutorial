@@ -1,0 +1,18 @@
+Удаление делается так:
+Поместить в нажатие кнопки "Удалить"
+
+var ClothForRemoving = DGridOstatok.SelectedItems.Cast<Склад_ткани>().ToList();//Здесь надо поменять DGridOstatok на название своего грида, тут Cast<Склад_ткани>() вместо Склад_Ткани указать таблицу из которой идёт удаление
+
+            if (MessageBox.Show($"Вы действительно хотите удалить выбранные {ClothForRemoving.Count()} строк?", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    FactoryEntities.GetContext().Склад_ткани.RemoveRange(ClothForRemoving);//тут меняем на свой фраемворк и Склад_Ткани на название соей таблицы.
+                    FactoryEntities.GetContext().SaveChanges();//Здес только свой фраемворк.
+                    MessageBox.Show("Данные удалены!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
+            }

@@ -1,0 +1,14 @@
+Это пока лучше не трогать.
+public DataTable Select(string selectSQL)
+        {
+            DataTable dataTable = new DataTable();
+
+            SqlConnection sqlConnection = new SqlConnection("server=DESKTOP-Q11MBLM;DataBase=Factory");
+            sqlConnection.Open();
+            SqlCommand sqlCommand = sqlConnection.CreateCommand();
+            sqlCommand.CommandText = selectSQL;
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            sqlDataAdapter.Fill(dataTable);
+
+            return dataTable;
+        }

@@ -1,0 +1,23 @@
+Это событие разрешает вводить те денные которые указаны.В примере это только заглавные буквы русского алфавита.
+Как это работает:
+Мы создаем событие у TextBox котрое называется PreviewTextInput.
+Дальше в него записываем то что в примере:
+
+  private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            char inp = e.Text[0];
+            if (inp < 'А' || inp > 'Я' & inp < 'a' || inp > 'z')
+                e.Handled = true;
+        }
+В этом примере разрешён ввод только руских букв.
+Чтобы разрешить вводить другие необходимые данные нужно добавить еще поля, например для ввода букв только английского алфавита нужно прописать так:
+            char inp = e.Text[0];
+            if (inp < 'A' || inp > 'Z' & inp < 'a' || inp > 'z')
+            e.Handled = true;
+
+Ввод только цифр:
+
+if (!Char.IsDigit(e.Text, 0))
+{
+e.Handled = true;
+}
