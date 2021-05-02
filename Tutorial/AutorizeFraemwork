@@ -35,7 +35,6 @@ if(user.Роль = "1")
                         var user = FactoryEntities.GetContext().Пользователь.First(p => p.Логин == TBLogin.Text && p.Пароль == TBPassword.Text);
                         if (user != null)
                         {
-                            FactoryEntities.CurrentUser = user;
                             if (user.Роль == "1")
                             {
                                 this.Hide();
