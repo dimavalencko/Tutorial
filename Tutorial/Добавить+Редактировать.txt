@@ -59,7 +59,7 @@ public partial class NewCar: Window
            InitializeComponent();
            if(currentcloth != null)
                 {           
-                   currentcloth = newcloth;
+                   newcloth = currentcloth;
                 }
            DataContext = newcloth;
         }
