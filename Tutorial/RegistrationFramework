@@ -8,6 +8,7 @@
 Код засунуть в кнопку "Зарегистрироваться".
 
             var newuser = new Пользователи();
+	    ConnectionEntities.CurrentUser = newuser;
             newuser.password = TBPassword.Text;
             newuser.login = TBLogin.Text;
             TestEntities.GetContext().Пользователи.Add(newuser);
