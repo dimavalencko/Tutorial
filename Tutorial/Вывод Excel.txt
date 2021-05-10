@@ -1,8 +1,9 @@
+Предупреждаю сразу, DataGrid и DataGridView это разные вещи.
 Прежде чем использовать это нужно подключить Эксель. как это делается: Справа в обозревателе решений жмём правой кнопкой на ссылки и жмём добавить. Слева выбираем COM и в поиске прописываем Excel. Ищем в полученном списке Microsoft Excel 16/0 Object Library и ставим галочку в чекбокс.
 Далее нужно поместить код ниже в обработчик кнопки по нажатию которй будет вывод в Эксель. В коде нужно лишь заменить название DataGrid откуда берутся данные, т.е заменить DataGridName на свое название. Также тут имеются некоторые ньюансы которые нужно подробно объяснять, но не в данном туториале. 
 Также когда вставишь код будут ошибки. Нужно заюзать библиотеку:
 using Excel = Microsoft.Office.Interop.Excel;
-Код:
+Код для DataGrid:
 
             Excel.Application excel = new Excel.Application();
             excel.Visible = true;
@@ -25,3 +26,21 @@ using Excel = Microsoft.Office.Interop.Excel;
                     myRange.Value2 = b.Text;
                 }
             }
+            
+Код для DataGridView:
+
+Microsoft.Office.Interop.Excel.Application ExcelApp = new Microsoft.Office.Interop.Excel.Application(); 
+Microsoft.Office.Interop.Excel.Workbook ExcelWorkBook; 
+Microsoft.Office.Interop.Excel.Worksheet ExcelWorkSheet; 
+ExcelWorkBook = ExcelApp.Workbooks.Add(System.Reflection.Missing.Value); 
+ExcelWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)ExcelWorkBook.Worksheets.get_Item(1); 
+
+for (int i = 0; i < dataGridView1.Rows.Count; i++) 
+{ 
+for (int j = 0; j < dataGridView1.ColumnCount; j++) 
+{ 
+ExcelApp.Cells[i + 1, j + 1] = dataGridView1.Rows[i].Cells[j].Value; 
+} 
+} 
+ExcelApp.Visible = true; 
+ExcelApp.UserControl = true;
