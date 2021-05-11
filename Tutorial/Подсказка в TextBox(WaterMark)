@@ -1,0 +1,27 @@
+Для работоспособности необходимы Родительские TextBox'ы, к которым будет привязана подсказка. В примере это Логин и Пароль.
+ 
+ <TextBlock Panel.ZIndex="1" x:Name="WaterMarkLogin" IsHitTestVisible="False" Foreground="Gray" Text="Введите логин" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="18" TextDecorations="{x:Null}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=НазваниеТекстбокса}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            
+<TextBlock Panel.ZIndex="1" x:Name="WaterMarkPass" IsHitTestVisible="False"  Foreground="Gray" Text="Введите пароль" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="18" TextDecorations="{x:Null}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=НазваниеТекстбокса}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
