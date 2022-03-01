@@ -1,92 +1,72 @@
 Как работает эта авторизация:
 
-Создаётся переменная user, в которую будет помещён найденый пользователь по логину и паролю. Если пользователь найден 'if(user != null)', 
-тогда кидаем его в определенное окно (в зависимости от ролей - ниже расписано, как делать авторизацию по ролям ). 
-Иначе кидаем ошибку - 'MessageBox.Show("Проверьте правильность ввдёнынх данных!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);'
+1 - Изначально делаются проверки на пустоту текстовых полей "Логин" и "Пароль". Если данные введены, то идём дальше.
 
-var НазваниеПеременной(Как ты пожелаешь) = НазваниеFraemworkКоторыйТыПодключил.МетодКоторыйУказанВПодключении.НазваниеТаблицыОткудаБратьДанные.
-Дальше можно использовать First или FirstOfDefault чтобы выбирать пользователя из таблицы.
-Как это работает:
-Мы записываем в переменую данные нужной таблицы и в ней ищем нужные данные, а именно конструкция First выбирает первого пользователя у которого совпали необходимые столбцы с введенными значениями.В примере это значения Логин и Пароль в таблице которые он ищет судя по введенным данным в TBLogin и TBPassword. 
-Дальше, если есть совпадения он записывает в переменную данные этого пользователя, т.е не только логин и пароль а все его данные со всех колонок.Потом смотрит если он не пустой(он может быть пустым в случае если в бд нет пользователя с такими данными), то уже делает авторизацию.В примере у пользователя есть так же колонка Роль в БД исходя из значения которой он переносит тебя на нужную форму. Если роли имеются то мы делаем так:
-if(user.Роль = "1")
-                {
-                    Form1 frm = new Form1();
-                    frm.Show();
-                }
-                else if(user.Роль = "2")
-                {
-                    Form2 frm = new Form2();
-                    frm.Show();
-                }
+2.1 - Создаётся переменная user, в которую будет помещён найденый пользователь по логину и паролю. 
+2.2 - Если пользователь найден 'if(user != null)', тогда кидаем его в определенное окно (в зависимости от ролей - ниже расписано, как делать авторизацию по ролям ). 
+2.3 - Иначе кидаем ошибку - 'MessageBox.Show("Проверьте правильность ввдёнынх данных!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);'
 
-Иначе просто переводим пользователя на нужное окно.
-Также в идеале сделать проверку на пустоту ТекстБоксов.Если данные не введены то выдать ошибку.
-Это все по авторизации, но нужно также засунуть все это в обработчик try {} catch(обработчик ошибок) чтобы в случае ошибки программа не закрываласьа продолжила работать.
-Код с проверками авторизацией и распределением по ролям.Поместить в обработчик нажатия на кнопку(Click):
+3.1 - Если пользователь найден (2.2), внутри блока можно перейти на окно или сделать разделение ролей.
+В примере у пользователя есть так же колонка Роль в БД исходя из значения которой он переносит тебя на нужную форму. Если роли имеются то мы делаем так:
+if(user.Роль = "admin")
+{
+    AdminMenu frm = new AdminMenu();
+    frm.Show();
+}
+else if(user.Роль = "customer")
+{
+    CustomerMenu frm = new CustomerMenu();
+    frm.Show();
+}
 
+Полный код авторизации для примера:
 
- private void Login(object sender, RoutedEventArgs e)
+if (TBLogin.Text.Length > 0) // 1
+{
+    if (TBPassword.Text.Length > 0) // 1
+    {
+        try
         {
-            if (TBLogin.Text.Length > 0)
+            var user = FactoryEntities.GetContext().Пользователь.First(p => p.Логин == TBLogin.Text && p.Пароль == TBPassword.Text); // 2.1
+            
+            if (user != null) // 2.2
             {
-                if (TBPassword.Text.Length > 0)
+                //Дальше идёт авторизация в зависимости от роли
+                if(user.Роль = "admin")
                 {
-                    try
-                    {
-                        var user = FactoryEntities.GetContext().Пользователь.First(p => p.Логин == TBLogin.Text && p.Пароль == TBPassword.Text);
-                        if (user != null)
-                        {//Дальше идёт авторизация в зависимости от роли
-                            if (user.Роль == "1")
-                            {
-                                this.Hide();
-                                var frm = new Customer();
-                                frm.Show();
-                            }
-                            else if (user.Роль == "2")
-                            {
-                                this.Hide();
-                                Manager frm = new Manager();
-                                frm.Show();
-                            }
-                            else if (user.Роль == "3")
-                            {
-                                this.Hide();
-                                Storekeeper frm = new Storekeeper();
-                                frm.Show();
-                            }
-                            else if (user.Роль == "4")
-                            {
-                                this.Hide();
-                                Director frm = new Director();
-                                frm.Show();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Введены некорректные данные!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            }
-
-                        }//если пользователя нет
-                        else
-                        {
-                            MessageBox.Show("Проверьте правильность ввдёнынх данных!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
-                            TBPassword.Clear();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString());
-                    }
-                }//если пароль пустой
-                else
-                {
-                    MessageBox.Show("Введите Пароль!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    TBPassword.Background = Brushes.Red;
+                    AdminMenu frm = new AdminMenu();
+                    frm.Show();
                 }
-            }//если логин пустой
-            else
+                else if(user.Роль = "customer")
+                {
+                    CustomerMenu frm = new CustomerMenu();
+                    frm.Show();
+                }
+                else // Если такой роли нет в базе данных
+                {
+                    MessageBox.Show("Пользователь имеет низкий уровень доступа! Отказано в авторизации!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+            }
+            else // Если пользователь не найден в БД по введённым данным
             {
-                MessageBox.Show("Введите Логин!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                TBLogin.Background = Brushes.Red;
+                MessageBox.Show("Пользователь с такими данными не был найден! Проверьте правильность ввдёнынх данных!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error); // 2.3
+                TBPassword.Clear(); // Очистка поля ввода пароля
             }
         }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message.ToString());
+        }
+    }
+    else // Если не введён пароль
+    {
+        MessageBox.Show("Введите Пароль!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
+        TBPassword.Background = Brushes.Red;
+    }
+}
+else // Если не введён логин
+{
+    MessageBox.Show("Введите Логин!", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
+    TBLogin.Background = Brushes.Red;
+}
